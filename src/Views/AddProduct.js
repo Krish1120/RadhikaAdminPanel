@@ -57,6 +57,7 @@ const validationSchema = yup.object({
 const sizes = ["2.2", "2.4", "2.6", "2.8", "2.10", "24", "30", "36", "42"];
 const materials = ["Gold", "Silver", "Crystal", "Bronze"];
 const categories = [
+  "Bangle",
   "Tika & Tyra",
   "Nath",
   "Mukut/Crown",
