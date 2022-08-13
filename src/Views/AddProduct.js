@@ -54,8 +54,19 @@ const validationSchema = yup.object({
     .string("Select availability")
     .required("Availability is required"),
 });
-const sizes = ["2.2", "2.4", "2.6", "2.8", "2.10", "24", "30", "36", "42","FREE"];
-const materials = ["Gold","Gold-Plated" "Silver", "Crystal", "Bronze"];
+const sizes = [
+  "2.2",
+  "2.4",
+  "2.6",
+  "2.8",
+  "2.10",
+  "24",
+  "30",
+  "36",
+  "42",
+  "FREE",
+];
+const materials = ["Gold", "Gold-Plated", "Silver", "Crystal", "Bronze"];
 const categories = [
   "Bangle",
   "Tika & Tyra",
