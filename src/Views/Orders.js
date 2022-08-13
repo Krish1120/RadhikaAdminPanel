@@ -41,7 +41,9 @@ function Orders() {
   const [updatedStatus, setUpdatedStatus] = useState([]);
   const fetchApi = async () => {
     try {
-      const res = await axios.get("http://localhost:50020/showOrders");
+      const res = await axios.get(
+        "https://radhika-admin-backend.herokuapp.com/showOrders"
+      );
       setOrders(res.data);
     } catch (error) {
       console.error(error);

@@ -54,8 +54,33 @@ const validationSchema = yup.object({
     .string("Select availability")
     .required("Availability is required"),
 });
-const sizes = ["1", "2", "3"];
-const materials = ["Gold", "Silver", "Bronze"];
+const sizes = ["2.2", "2.4", "2.6", "2.8", "2.10", "24", "30", "36", "42"];
+const materials = ["Gold", "Silver", "Crystal", "Bronze"];
+const categories = [
+  "Tika & Tyra",
+  "Nath",
+  "Mukut/Crown",
+  "Earing & Tops",
+  "Bahubali Earing",
+  "Chowker",
+  "Bajubandh",
+  "Necklace",
+  "Long Set",
+  "Kamarbandh",
+  "Chur",
+  "Hath Panja",
+  "Finger Ring",
+  "Payal/Anklet",
+  "Bridal Necklace",
+  "Chain",
+  "Mangalsutra",
+  "Bracelet",
+  "Pendent Set",
+  "Tie Set",
+  "Mantasha",
+  "Khopa Jhapta",
+  "Sakha & Pola",
+];
 function AddProducts() {
   const { drawerOpen } = useSelector((state) => state.userReducer);
   const ITEM_HEIGHT = 48;
@@ -96,7 +121,7 @@ function AddProducts() {
       }
       try {
         const res = axios.post(
-          "http://localhost:50020/addNewProduct",
+          "https://radhika-admin-backend.herokuapp.com/addNewProduct",
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -157,8 +182,9 @@ function AddProducts() {
                       formik.touched.category && formik.errors.category
                     }
                   >
-                    <MenuItem value="Bangle">Bangle</MenuItem>
-                    <MenuItem value="Ring">Ring</MenuItem>
+                    {categories.map((category) => {
+                      return <MenuItem value={category}>{category}</MenuItem>;
+                    })}
                   </Select>
                 </FormControl>
               </Grid>

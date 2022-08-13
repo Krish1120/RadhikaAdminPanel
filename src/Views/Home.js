@@ -43,9 +43,13 @@ export default function Home() {
   const dispatch = useDispatch();
   const fetchApi = async () => {
     try {
-      const res = await axios.get("http://localhost:50020/viewAllProducts");
+      const res = await axios.get(
+        "https://radhika-admin-backend.herokuapp.com/viewAllProducts"
+      );
       dispatch(setProductData(res.data));
-      const res2 = await axios.get("http://localhost:50020/viewAllCoupons");
+      const res2 = await axios.get(
+        "https://radhika-admin-backend.herokuapp.com/viewAllCoupons"
+      );
       dispatch(setCoupons(res2.data));
     } catch (error) {
       console.error(error);
@@ -181,7 +185,7 @@ export default function Home() {
                               onClick={async () => {
                                 try {
                                   const res = await axios.delete(
-                                    `http://localhost:50020/deleteProduct/${product._id}`
+                                    `https://radhika-admin-backend.herokuapp.com/deleteProduct/${product._id}`
                                   );
                                   console.log(res);
                                 } catch (error) {
@@ -276,7 +280,7 @@ export default function Home() {
                               onClick={async () => {
                                 try {
                                   const res = await axios.delete(
-                                    `http://localhost:50020/deleteCoupon/${coupon._id}`
+                                    `https://radhika-admin-backend.herokuapp.com/deleteCoupon/${coupon._id}`
                                   );
                                   console.log(res);
                                 } catch (error) {

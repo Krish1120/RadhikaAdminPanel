@@ -72,7 +72,10 @@ function AddCoupons() {
     validationSchema: validationSchema,
     onSubmit: (values, formikActions) => {
       try {
-        const res = axios.post("http://localhost:50020/addNewCoupon", values);
+        const res = axios.post(
+          "https://radhika-admin-backend.herokuapp.com/addNewCoupon",
+          values
+        );
         console.log(res);
       } catch (error) {
         console.error(error);

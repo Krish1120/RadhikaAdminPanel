@@ -71,8 +71,11 @@ function Users() {
   const { drawerOpen, users } = useSelector((state) => state.userReducer);
   const fetchApi = async () => {
     try {
-      const res = await axios.get("http://localhost:50020/viewAllUsers");
+      const res = await axios.get(
+        "https://radhika-admin-backend.herokuapp.com/viewAllUsers"
+      );
       dispatch(setUsers(res.data));
+      console.log(users);
       if (users) {
         for (let i = 0; i < users.length; i++) {
           let id = users[i]._id;
