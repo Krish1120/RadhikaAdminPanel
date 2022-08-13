@@ -141,7 +141,7 @@ export default function DrawerLeft() {
           style={{ backgroundColor: "#f8bbd0", justifyContent: "center" }}
         >
           <Typography fontSize={24} fontWeight={500}>
-            ADMIN PANEL
+            HELLO, ADMIN
           </Typography>
         </DrawerHeader>
         <Divider variant="middle" />
