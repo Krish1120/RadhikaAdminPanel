@@ -15,6 +15,7 @@ import { styled } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { setCoupons, setProductData } from "../redux/actions";
+import ImageSlider from "../Components/Carousel";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -105,13 +106,10 @@ export default function Home() {
                           >
                             {product.productName}
                           </Typography>
-                          <CardMedia
-                            component="img"
-                            style={{ height: "20rem" }}
-                            alt={product.productName}
-                            image={product.images[0].imgUrl}
-                          />
                           <CardContent>
+                            <div style={{ height: "20rem" }}>
+                              <ImageSlider data={product.images} />
+                            </div>
                             <div style={{ display: "flex" }}>
                               <Typography variant="body1" component="div">
                                 Description :
@@ -123,6 +121,19 @@ export default function Home() {
                                 marginLeft={1}
                               >
                                 {product.description}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Quantity :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.quantity}
                               </Typography>
                             </div>
                             <div style={{ display: "flex" }}>

@@ -49,6 +49,9 @@ const validationSchema = yup.object({
   description: yup
     .string("Enter product description")
     .required("Description is required"),
+  quantity: yup
+    .string("Enter product quantity")
+    .required("Quantity is required"),
   price: yup.string("Enter product Price").required("Price is required"),
   status: yup
     .string("Select availability")
@@ -66,7 +69,14 @@ const sizes = [
   "42",
   "FREE",
 ];
-const materials = ["Gold", "Gold-Plated", "Silver", "Crystal", "Bronze"];
+const materials = [
+  "Gold",
+  "Gold-Plated",
+  "Silver",
+  "Crystal",
+  "Bronze",
+  "Other",
+];
 const categories = [
   "Bangle",
   "Tika & Tyra",
@@ -111,6 +121,7 @@ function AddProducts() {
       category: "",
       forMenOrWomen: "",
       description: "",
+      quantity: "",
       size: [],
       material: [],
       price: "",
@@ -124,6 +135,7 @@ function AddProducts() {
       formData.append("category", values.category);
       formData.append("price", values.price);
       formData.append("description", values.description);
+      formData.append("quantity", values.quantity);
       formData.append("forMenOrWomen", values.forMenOrWomen);
       formData.append("material", values.material);
       formData.append("size", values.size);
@@ -131,6 +143,7 @@ function AddProducts() {
       for (let pic of values.images) {
         formData.append("productPicture", pic);
       }
+      console.log(formData);
       try {
         const res = axios.post(
           "https://radhika-admin-backend.herokuapp.com/addNewProduct",
@@ -242,6 +255,25 @@ function AddProducts() {
                     }
                     helperText={
                       formik.touched.description && formik.errors.description
+                    }
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs>
+                <FormControl sx={{ m: 1, minWidth: 300 }}>
+                  <TextField
+                    id="quantity"
+                    label="QUANTITY"
+                    name="quantity"
+                    multiline
+                    maxRows={5}
+                    value={formik.values.quantity}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.quantity && Boolean(formik.errors.quantity)
+                    }
+                    helperText={
+                      formik.touched.quantity && formik.errors.quantity
                     }
                   />
                 </FormControl>
