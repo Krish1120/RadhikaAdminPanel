@@ -160,9 +160,6 @@ export default function Home() {
     setValue(newValue);
   };
 
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
   const notify = () =>
     toast.success("Product Deleted Successfully!", {
       position: "top-center",
