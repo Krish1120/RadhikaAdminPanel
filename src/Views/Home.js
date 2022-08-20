@@ -11,7 +11,6 @@ import Grid from "@mui/material/Grid";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
@@ -236,329 +235,323 @@ export default function Home() {
                 />
               </Tabs>
             </AppBar>
-            <SwipeableViews
-              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-              index={value}
-              onChangeIndex={handleChangeIndex}
-            >
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <Grid container spacing={3} marginTop={1}>
-                  {productData &&
-                    productData.map((product) => {
-                      return (
-                        <Grid key={product._id} item xs>
-                          <Card sx={{ margin: 1, width: "20rem" }}>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+              <Grid container spacing={3} marginTop={1}>
+                {productData &&
+                  productData.map((product) => {
+                    return (
+                      <Grid key={product._id} item xs>
+                        <Card sx={{ margin: 1, width: "20rem" }}>
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            margin={1}
+                            textAlign="center"
+                          >
+                            {product.productName}
+                          </Typography>
+                          <CardContent>
+                            <div style={{ height: "20rem" }}>
+                              <ImageSlider data={product.images} />
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Description :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.description}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Quantity :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.quantity}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Category :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.category}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Price :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                Rs.
+                                {product.price}/-
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Available in :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.material}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Available sizes :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.size}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Status :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {product.status}
+                              </Typography>
+                            </div>
+                          </CardContent>
+                          <CardActions
+                            className={toggleActiveDelete(product._id)}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <div
+                              className="confirmDelete"
+                              style={{
+                                flexDirection: "column",
+                              }}
+                            >
+                              <Typography style={{ marginBottom: 10 }}>
+                                Product Will be Permanently Deleted.
+                              </Typography>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-evenly",
+                                }}
+                              >
+                                <Button
+                                  variant="contained"
+                                  onClick={() => toggleInActive(product._id)}
+                                >
+                                  No
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  color="error"
+                                  onClick={async () => {
+                                    try {
+                                      const res = await axios.delete(
+                                        `https://radhika-admin-backend.herokuapp.com/deleteProduct/${product._id}`
+                                      );
+                                      console.log(res);
+                                      notify();
+                                    } catch (error) {
+                                      console.error(error);
+                                    }
+                                  }}
+                                >
+                                  Proceed
+                                </Button>
+                              </div>
+                            </div>
+                            <Button
+                              className="deleteBtn"
+                              color="error"
+                              startIcon={<DeleteIcon />}
+                              onClick={() => toggleActive(product._id)}
+                            >
+                              DELETE
+                            </Button>
+                          </CardActions>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+              </Grid>
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <Grid container spacing={3} marginTop={1}>
+                {coupons &&
+                  coupons.map((coupon) => {
+                    return (
+                      <Grid key={coupon._id} item xs>
+                        <Card sx={{ margin: 1, width: "20rem" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
                             <Typography
                               variant="h5"
                               component="div"
                               margin={1}
                               textAlign="center"
                             >
-                              {product.productName}
+                              CODE :
                             </Typography>
-                            <CardContent>
-                              <div style={{ height: "20rem" }}>
-                                <ImageSlider data={product.images} />
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Description :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {product.description}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Quantity :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {product.quantity}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Category :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {product.category}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Price :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  Rs.
-                                  {product.price}/-
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Available in :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {product.material}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Available sizes :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {product.size}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Status :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {product.status}
-                                </Typography>
-                              </div>
-                            </CardContent>
-                            <CardActions
-                              className={toggleActiveDelete(product._id)}
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
+                            <Typography
+                              variant="h5"
+                              component="div"
+                              margin={1}
+                              textAlign="center"
                             >
-                              <div
-                                className="confirmDelete"
-                                style={{
-                                  flexDirection: "column",
-                                }}
-                              >
-                                <Typography style={{ marginBottom: 10 }}>
-                                  Product Will be Permanently Deleted.
-                                </Typography>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-evenly",
-                                  }}
-                                >
-                                  <Button
-                                    variant="contained"
-                                    onClick={() => toggleInActive(product._id)}
-                                  >
-                                    No
-                                  </Button>
-                                  <Button
-                                    variant="contained"
-                                    color="error"
-                                    onClick={async () => {
-                                      try {
-                                        const res = await axios.delete(
-                                          `https://radhika-admin-backend.herokuapp.com/deleteProduct/${product._id}`
-                                        );
-                                        console.log(res);
-                                        notify();
-                                      } catch (error) {
-                                        console.error(error);
-                                      }
-                                    }}
-                                  >
-                                    Proceed
-                                  </Button>
-                                </div>
-                              </div>
-                              <Button
-                                className="deleteBtn"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                                onClick={() => toggleActive(product._id)}
-                              >
-                                DELETE
-                              </Button>
-                            </CardActions>
-                          </Card>
-                        </Grid>
-                      );
-                    })}
-                </Grid>
-              </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <Grid container spacing={3} marginTop={1}>
-                  {coupons &&
-                    coupons.map((coupon) => {
-                      return (
-                        <Grid key={coupon._id} item xs>
-                          <Card sx={{ margin: 1, width: "20rem" }}>
+                              {coupon.couponName}
+                            </Typography>
+                          </div>
+                          <CardContent>
                             <div
                               style={{
                                 display: "flex",
-                                justifyContent: "center",
                               }}
                             >
                               <Typography
-                                variant="h5"
+                                variant="body1"
                                 component="div"
-                                margin={1}
-                                textAlign="center"
+                                minWidth={90}
                               >
-                                CODE :
+                                Description :
                               </Typography>
                               <Typography
-                                variant="h5"
-                                component="div"
-                                margin={1}
-                                textAlign="center"
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
                               >
-                                {coupon.couponName}
+                                {coupon.description}
                               </Typography>
                             </div>
-                            <CardContent>
-                              <div
-                                style={{
-                                  display: "flex",
-                                }}
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Rule :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
                               >
-                                <Typography
-                                  variant="body1"
-                                  component="div"
-                                  minWidth={90}
-                                >
-                                  Description :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {coupon.description}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Rule :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {coupon.rule}
-                                </Typography>
-                              </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Discount Amount :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
-                                >
-                                  {coupon.discountAmount}
-                                </Typography>
-                              </div>
-                            </CardContent>
-                            <CardActions
-                              className={toggleActiveDeleteCoupon(coupon._id)}
+                                {coupon.rule}
+                              </Typography>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <Typography variant="body1" component="div">
+                                Discount Amount :
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                alignSelf="center"
+                                marginLeft={1}
+                              >
+                                {coupon.discountAmount}
+                              </Typography>
+                            </div>
+                          </CardContent>
+                          <CardActions
+                            className={toggleActiveDeleteCoupon(coupon._id)}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <div
+                              className="confirmCouponDelete"
                               style={{
-                                display: "flex",
                                 flexDirection: "column",
                               }}
                             >
+                              <Typography style={{ marginBottom: 10 }}>
+                                Coupon Will be Permanently Deleted.
+                              </Typography>
                               <div
-                                className="confirmCouponDelete"
                                 style={{
-                                  flexDirection: "column",
+                                  display: "flex",
+                                  justifyContent: "space-evenly",
                                 }}
                               >
-                                <Typography style={{ marginBottom: 10 }}>
-                                  Coupon Will be Permanently Deleted.
-                                </Typography>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-evenly",
+                                <Button
+                                  variant="contained"
+                                  onClick={() =>
+                                    toggleInActiveCoupon(coupon._id)
+                                  }
+                                >
+                                  No
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  color="error"
+                                  onClick={async () => {
+                                    try {
+                                      const res = await axios.delete(
+                                        `https://radhika-admin-backend.herokuapp.com/deleteCoupon/${coupon._id}`
+                                      );
+                                      notifyCoupon();
+                                      console.log(res);
+                                    } catch (error) {
+                                      console.error(error);
+                                    }
                                   }}
                                 >
-                                  <Button
-                                    variant="contained"
-                                    onClick={() =>
-                                      toggleInActiveCoupon(coupon._id)
-                                    }
-                                  >
-                                    No
-                                  </Button>
-                                  <Button
-                                    variant="contained"
-                                    color="error"
-                                    onClick={async () => {
-                                      try {
-                                        const res = await axios.delete(
-                                          `https://radhika-admin-backend.herokuapp.com/deleteCoupon/${coupon._id}`
-                                        );
-                                        notifyCoupon();
-                                        console.log(res);
-                                      } catch (error) {
-                                        console.error(error);
-                                      }
-                                    }}
-                                  >
-                                    Proceed
-                                  </Button>
-                                </div>
+                                  Proceed
+                                </Button>
                               </div>
-                              <Button
-                                className="deleteCouponBtn"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                                onClick={() => toggleActiveCoupon(coupon._id)}
-                              >
-                                DELETE
-                              </Button>
-                            </CardActions>
-                          </Card>
-                        </Grid>
-                      );
-                    })}
-                </Grid>
-              </TabPanel>
-            </SwipeableViews>
+                            </div>
+                            <Button
+                              className="deleteCouponBtn"
+                              color="error"
+                              startIcon={<DeleteIcon />}
+                              onClick={() => toggleActiveCoupon(coupon._id)}
+                            >
+                              DELETE
+                            </Button>
+                          </CardActions>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+              </Grid>
+            </TabPanel>
           </Box>
         </div>
         <ToastContainer />
