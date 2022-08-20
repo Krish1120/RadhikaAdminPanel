@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DrawerLeft from "../Components/Drawer";
 import { useFormik } from "formik";
 import { styled } from "@mui/material/styles";
@@ -17,6 +17,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
+import PreviewImage from "../Components/PreviewImage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -107,6 +110,11 @@ function AddProducts() {
   const { drawerOpen } = useSelector((state) => state.userReducer);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
+  const notify = () =>
+    toast.success("Product Added Successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
   const MenuProps = {
     PaperProps: {
       style: {
@@ -143,7 +151,6 @@ function AddProducts() {
       for (let pic of values.images) {
         formData.append("productPicture", pic);
       }
-      console.log(formData);
       try {
         const res = axios.post(
           "https://radhika-admin-backend.herokuapp.com/addNewProduct",
@@ -151,12 +158,24 @@ function AddProducts() {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
         console.log(res);
+        notify();
       } catch (error) {
         console.error(error);
       }
       formikActions.resetForm();
     },
   });
+  const onSelectFile = (e) => {
+    formik.setFieldValue("images", [
+      ...formik.values.images,
+      ...e.target.files,
+    ]);
+  };
+  const deleteHandler = (key) => {
+    let arr = [...formik.values.images];
+    arr.splice(key, 1);
+    formik.setFieldValue("images", arr);
+  };
   return (
     <div>
       <DrawerLeft />
@@ -373,35 +392,67 @@ function AddProducts() {
                   </RadioGroup>
                 </FormControl>
               </Grid>
-              <Grid item xs>
-                <FormControl sx={{ m: 1, minWidth: 300 }}>
-                  <Button variant="contained" component="label">
-                    Upload
-                    <input
-                      hidden
-                      accept="image/*"
-                      multiple
-                      type="file"
-                      onChange={(event) => {
-                        formik.setFieldValue("images", [
-                          ...formik.values.images,
-                          event.target.files[0],
-                        ]);
+              <Grid item xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControl sx={{ m: 1 }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      style={{
+                        fontSize: 20,
+                        borderRadius: 12,
                       }}
-                    />
-                  </Button>
-                </FormControl>
+                    >
+                      Upload
+                      <input
+                        hidden
+                        accept="image/*"
+                        multiple
+                        type="file"
+                        onChange={onSelectFile}
+                      />
+                    </Button>
+                  </FormControl>
+                </div>
+                <PreviewImage
+                  filesData={formik.values.images}
+                  deleteHandler={deleteHandler}
+                />
               </Grid>
-              <Grid item xs>
-                <FormControl sx={{ m: 1, minWidth: 300 }}>
-                  <Button color="primary" variant="contained" type="submit">
-                    ADD PRODUCT
-                  </Button>
-                </FormControl>
+              <Grid item xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControl sx={{ m: 1 }}>
+                    <Button
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                      style={{
+                        fontSize: 20,
+                        borderRadius: 12,
+                        alignSelf: "center",
+                      }}
+                    >
+                      ADD PRODUCT
+                    </Button>
+                  </FormControl>
+                </div>
               </Grid>
             </Grid>
           </Box>
         </form>
+        <ToastContainer />
       </Main>
     </div>
   );

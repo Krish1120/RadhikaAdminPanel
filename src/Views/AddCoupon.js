@@ -15,6 +15,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -62,6 +64,11 @@ function AddCoupons() {
       },
     },
   };
+  const notify = () =>
+    toast.success("Coupon Added Successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
   const formik = useFormik({
     initialValues: {
       couponName: "",
@@ -76,6 +83,7 @@ function AddCoupons() {
           "https://radhika-admin-backend.herokuapp.com/addNewCoupon",
           values
         );
+        notify();
         console.log(res);
       } catch (error) {
         console.error(error);
@@ -180,7 +188,16 @@ function AddCoupons() {
               </Grid>
               <Grid item xs>
                 <FormControl sx={{ m: 1, minWidth: 300 }}>
-                  <Button color="primary" variant="contained" type="submit">
+                  <Button
+                    color="success"
+                    variant="contained"
+                    type="submit"
+                    style={{
+                      fontSize: 20,
+                      borderRadius: 12,
+                      alignSelf: "center",
+                    }}
+                  >
                     ADD COUPON
                   </Button>
                 </FormControl>
@@ -188,6 +205,7 @@ function AddCoupons() {
             </Grid>
           </Box>
         </form>
+        <ToastContainer />
       </Main>
     </div>
   );

@@ -1,0 +1,27 @@
+.active .deleteBtn {
+  display: none;
+}
+.active .confirmDelete {
+  display: flex;
+}
+
+.inactive .deleteBtn {
+  display: flex;
+}
+.inactive .confirmDelete {
+  display: none;
+}
+
+.activeCoupon .deleteCouponBtn {
+  display: none;
+}
+.activeCoupon .confirmCouponDelete {
+  display: flex;
+}
+
+.inactiveCoupon .deleteCouponBtn {
+  display: flex;
+}
+.inactiveCoupon .confirmCouponDelete {
+  display: none;
+}
