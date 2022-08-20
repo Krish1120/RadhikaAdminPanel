@@ -17,18 +17,21 @@ import { styled } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { setCoupons, setProductData } from "../redux/actions";
+import InputAdornment from "@mui/material/InputAdornment";
 import ImageSlider from "../Components/Carousel";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Home.css";
 import { pink } from "@mui/material/colors";
+import { TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
-    paddingLeft: theme.spacing(5),
+    paddingLeft: theme.spacing(4),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -81,6 +84,7 @@ function a11yProps(index) {
 export default function Home() {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
+  const [searchProduct, setSearchProduct] = React.useState("");
   const [show, setShow] = React.useState({
     activeCard: null,
     products: null,
@@ -106,6 +110,7 @@ export default function Home() {
       console.error(error);
     }
   };
+
   useEffect(() => {
     fetchApi();
   }, [value]);
@@ -233,177 +238,211 @@ export default function Home() {
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} dir={theme.direction}>
+              <TextField
+                id="outlined-search"
+                label="Search Product"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  marginTop: 3,
+                  marginBottom: 3,
+                  width: "100%",
+                }}
+                onChange={(e) => {
+                  setSearchProduct(e.target.value);
+                }}
+              />
               <Grid container spacing={3} marginTop={1}>
                 {productData &&
-                  productData.map((product) => {
-                    return (
-                      <Grid key={product._id} item xs>
-                        <Card sx={{ margin: 1, width: "20rem" }}>
-                          <Typography
-                            variant="h5"
-                            component="div"
-                            margin={1}
-                            textAlign="center"
-                          >
-                            {product.productName}
-                          </Typography>
-                          <CardContent>
-                            <div style={{ height: "20rem" }}>
-                              <ImageSlider data={product.images} />
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Description :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                {product.description}
-                              </Typography>
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Quantity :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                {product.quantity}
-                              </Typography>
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Category :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                {product.category}
-                              </Typography>
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Price :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                Rs.
-                                {product.price}/-
-                              </Typography>
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Available in :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                {product.material}
-                              </Typography>
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Available sizes :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                {product.size}
-                              </Typography>
-                            </div>
-                            <div style={{ display: "flex" }}>
-                              <Typography variant="body1" component="div">
-                                Status :
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                alignSelf="center"
-                                marginLeft={1}
-                              >
-                                {product.status}
-                              </Typography>
-                            </div>
-                          </CardContent>
-                          <CardActions
-                            className={toggleActiveDelete(product._id)}
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div
-                              className="confirmDelete"
+                  productData
+                    .filter((item) => {
+                      if (searchProduct == "") {
+                        return item;
+                      } else if (
+                        item.productName
+                          .toLowerCase()
+                          .includes(searchProduct.toLowerCase()) ||
+                        item.category
+                          .toLowerCase()
+                          .includes(searchProduct.toLowerCase())
+                      ) {
+                        return item;
+                      }
+                    })
+                    .map((product) => {
+                      return (
+                        <Grid key={product._id} item xs>
+                          <Card sx={{ margin: 1, width: "20rem" }}>
+                            <Typography
+                              variant="h5"
+                              component="div"
+                              margin={1}
+                              textAlign="center"
+                            >
+                              {product.productName}
+                            </Typography>
+                            <CardContent>
+                              <div style={{ height: "20rem" }}>
+                                <ImageSlider data={product.images} />
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Description :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.description}
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Quantity :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.quantity}
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Category :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.category}
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Price :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  Rs.
+                                  {product.price}/-
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Available in :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.material}
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Available sizes :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.size}
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  Status :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.status}
+                                </Typography>
+                              </div>
+                            </CardContent>
+                            <CardActions
+                              className={toggleActiveDelete(product._id)}
                               style={{
+                                display: "flex",
                                 flexDirection: "column",
                               }}
                             >
-                              <Typography style={{ marginBottom: 10 }}>
-                                Product Will be Permanently Deleted.
-                              </Typography>
                               <div
+                                className="confirmDelete"
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "space-evenly",
+                                  flexDirection: "column",
                                 }}
                               >
-                                <Button
-                                  variant="contained"
-                                  onClick={() => toggleInActive(product._id)}
-                                >
-                                  No
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  color="error"
-                                  onClick={async () => {
-                                    try {
-                                      const res = await axios.delete(
-                                        `https://radhika-admin-backend.herokuapp.com/deleteProduct/${product._id}`
-                                      );
-                                      console.log(res);
-                                      notify();
-                                    } catch (error) {
-                                      console.error(error);
-                                    }
+                                <Typography style={{ marginBottom: 10 }}>
+                                  Product Will be Permanently Deleted.
+                                </Typography>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-evenly",
                                   }}
                                 >
-                                  Proceed
-                                </Button>
+                                  <Button
+                                    variant="contained"
+                                    onClick={() => toggleInActive(product._id)}
+                                  >
+                                    No
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    color="error"
+                                    onClick={async () => {
+                                      try {
+                                        const res = await axios.delete(
+                                          `https://radhika-admin-backend.herokuapp.com/deleteProduct/${product._id}`
+                                        );
+                                        console.log(res);
+                                        notify();
+                                      } catch (error) {
+                                        console.error(error);
+                                      }
+                                    }}
+                                  >
+                                    Proceed
+                                  </Button>
+                                </div>
                               </div>
-                            </div>
-                            <Button
-                              className="deleteBtn"
-                              color="error"
-                              startIcon={<DeleteIcon />}
-                              onClick={() => toggleActive(product._id)}
-                            >
-                              DELETE
-                            </Button>
-                          </CardActions>
-                        </Card>
-                      </Grid>
-                    );
-                  })}
+                              <Button
+                                className="deleteBtn"
+                                color="error"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => toggleActive(product._id)}
+                              >
+                                DELETE
+                              </Button>
+                            </CardActions>
+                          </Card>
+                        </Grid>
+                      );
+                    })}
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
