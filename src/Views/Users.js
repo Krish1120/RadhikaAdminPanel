@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import fetcher from "../Components/axios";
 import { setUsers } from "../redux/actions";
 
 const drawerWidth = 240;
@@ -71,9 +71,7 @@ function Users() {
   const { drawerOpen, users } = useSelector((state) => state.userReducer);
   const fetchApi = async () => {
     try {
-      const res = await axios.get(
-        "https://radhika-admin-backend.herokuapp.com/viewAllUsers"
-      );
+      const res = await fetcher.get("/viewAllUsers");
       dispatch(setUsers(res.data));
       console.log(users);
       if (users) {

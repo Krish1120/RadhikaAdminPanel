@@ -15,8 +15,8 @@ import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import { setCoupons, setProductData } from "../redux/actions";
+import { useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import ImageSlider from "../Components/Carousel";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,6 +25,8 @@ import "./Home.css";
 import { pink } from "@mui/material/colors";
 import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
+import fetcher from "../Components/axios";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -82,6 +84,7 @@ function a11yProps(index) {
 }
 
 export default function Home() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [searchProduct, setSearchProduct] = React.useState("");
@@ -93,17 +96,17 @@ export default function Home() {
     activeCard: null,
     couponsdata: null,
   });
+  const { drawerOpen, productData, coupons } = useSelector(
+    (state) => state.userReducer
+  );
+
   const dispatch = useDispatch();
   const fetchApi = async () => {
     try {
-      const res = await axios.get(
-        "https://radhika-admin-backend.herokuapp.com/viewAllProducts"
-      );
+      const res = await fetcher.get("/viewAllProducts");
       dispatch(setProductData(res.data));
       setShow({ ...show, products: res.data });
-      const res2 = await axios.get(
-        "https://radhika-admin-backend.herokuapp.com/viewAllCoupons"
-      );
+      const res2 = await fetcher.get("/viewAllCoupons");
       setCouponShow({ ...couponShow, couponsdata: res2.data });
       dispatch(setCoupons(res2.data));
     } catch (error) {
@@ -114,9 +117,6 @@ export default function Home() {
   useEffect(() => {
     fetchApi();
   }, [value]);
-  const { drawerOpen, productData, coupons } = useSelector(
-    (state) => state.userReducer
-  );
 
   function toggleActive(id) {
     setShow({ ...show, activeCard: show.products.filter((p) => p._id === id) });
@@ -261,7 +261,7 @@ export default function Home() {
                 {productData &&
                   productData
                     .filter((item) => {
-                      if (searchProduct == "") {
+                      if (searchProduct === "") {
                         return item;
                       } else if (
                         item.productName
@@ -290,8 +290,16 @@ export default function Home() {
                               <div style={{ height: "20rem" }}>
                                 <ImageSlider data={product.images} />
                               </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
+                              <div
+                                style={{
+                                  display: "flex",
+                                }}
+                              >
+                                <Typography
+                                  variant="body1"
+                                  component="div"
+                                  minWidth={90}
+                                >
                                   Description :
                                 </Typography>
                                 <Typography
@@ -299,6 +307,10 @@ export default function Home() {
                                   color="text.secondary"
                                   alignSelf="center"
                                   marginLeft={1}
+                                  maxWidth="70%"
+                                  style={{
+                                    wordWrap: "break-word",
+                                  }}
                                 >
                                   {product.description}
                                 </Typography>
@@ -314,6 +326,19 @@ export default function Home() {
                                   marginLeft={1}
                                 >
                                   {product.quantity}
+                                </Typography>
+                              </div>
+                              <div style={{ display: "flex" }}>
+                                <Typography variant="body1" component="div">
+                                  For Gender :
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  alignSelf="center"
+                                  marginLeft={1}
+                                >
+                                  {product.forMenOrWomen}
                                 </Typography>
                               </div>
                               <div style={{ display: "flex" }}>
@@ -416,8 +441,8 @@ export default function Home() {
                                     color="error"
                                     onClick={async () => {
                                       try {
-                                        const res = await axios.delete(
-                                          `https://radhika-admin-backend.herokuapp.com/deleteProduct/${product._id}`
+                                        const res = await fetcher.delete(
+                                          `/deleteProduct/${product._id}`
                                         );
                                         console.log(res);
                                         notify();
@@ -430,14 +455,35 @@ export default function Home() {
                                   </Button>
                                 </div>
                               </div>
-                              <Button
-                                className="deleteBtn"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                                onClick={() => toggleActive(product._id)}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: "space-evenly",
+                                  width: "100%",
+                                }}
                               >
-                                DELETE
-                              </Button>
+                                <Button
+                                  className="editBtn"
+                                  color="primary"
+                                  startIcon={<EditIcon />}
+                                  onClick={() => {
+                                    navigate("/editProduct", {
+                                      state: { product: product },
+                                    });
+                                  }}
+                                >
+                                  EDIT
+                                </Button>
+                                <Button
+                                  className="deleteBtn"
+                                  color="error"
+                                  startIcon={<DeleteIcon />}
+                                  onClick={() => toggleActive(product._id)}
+                                >
+                                  DELETE
+                                </Button>
+                              </div>
                             </CardActions>
                           </Card>
                         </Grid>
@@ -493,6 +539,10 @@ export default function Home() {
                                 color="text.secondary"
                                 alignSelf="center"
                                 marginLeft={1}
+                                maxWidth="70%"
+                                style={{
+                                  wordWrap: "break-word",
+                                }}
                               >
                                 {coupon.description}
                               </Typography>
@@ -559,8 +609,8 @@ export default function Home() {
                                   color="error"
                                   onClick={async () => {
                                     try {
-                                      const res = await axios.delete(
-                                        `https://radhika-admin-backend.herokuapp.com/deleteCoupon/${coupon._id}`
+                                      const res = await fetcher.delete(
+                                        `/deleteCoupon/${coupon._id}`
                                       );
                                       notifyCoupon();
                                       console.log(res);

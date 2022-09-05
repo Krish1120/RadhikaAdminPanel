@@ -14,9 +14,9 @@ import FormLabel from "@mui/material/FormLabel";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import fetcher from "../Components/axios";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -79,10 +79,7 @@ function AddCoupons() {
     validationSchema: validationSchema,
     onSubmit: (values, formikActions) => {
       try {
-        const res = axios.post(
-          "https://radhika-admin-backend.herokuapp.com/addNewCoupon",
-          values
-        );
+        const res = fetcher.post("/addNewCoupon", values);
         notify();
         console.log(res);
       } catch (error) {
@@ -137,12 +134,11 @@ function AddCoupons() {
                     error={formik.touched.rule && Boolean(formik.errors.rule)}
                     helperText={formik.touched.rule && formik.errors.rule}
                   >
+                    <MenuItem value=">500">"Orders Amount > 500"</MenuItem>
+                    <MenuItem value=">800">"Orders Amount > 800"</MenuItem>
                     <MenuItem value=">1000">"Orders Amount > 1000"</MenuItem>
-                    <MenuItem value=">2500">"Orders Amount > 2500"</MenuItem>
-                    <MenuItem value=">5000">"Orders Amount > 5000"</MenuItem>
-                    <MenuItem value=">10000">"Orders Amount > 10000"</MenuItem>
-                    <MenuItem value=">15000">"Orders Amount > 15000"</MenuItem>
-                    <MenuItem value=">20000">"Orders Amount > 20000"</MenuItem>
+                    <MenuItem value=">1500">"Orders Amount > 1500"</MenuItem>
+                    <MenuItem value=">2000">"Orders Amount > 2000"</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

@@ -7,6 +7,7 @@ import AddProducts from "./Views/AddProduct";
 import { Provider } from "react-redux";
 import { Store } from "./redux/store";
 import AddCoupons from "./Views/AddCoupon";
+import EditProducts from "./Views/EditProduct";
 
 const theme = createTheme({
   typography: {
@@ -24,6 +25,10 @@ function App() {
               <Route
                 path="/addProduct"
                 element={<AddProducts></AddProducts>}
+              ></Route>
+              <Route
+                path="/editProduct"
+                element={<EditProducts></EditProducts>}
               ></Route>
               <Route path="/users" element={<Users></Users>}></Route>
               <Route path="/orders" element={<Orders></Orders>}></Route>

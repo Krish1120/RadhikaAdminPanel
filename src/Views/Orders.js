@@ -14,7 +14,7 @@ import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import axios from "axios";
+import fetcher from "../Components/axios";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -41,9 +41,7 @@ function Orders() {
   const [updatedStatus, setUpdatedStatus] = useState([]);
   const fetchApi = async () => {
     try {
-      const res = await axios.get(
-        "https://radhika-admin-backend.herokuapp.com/showOrders"
-      );
+      const res = await fetcher.get("/showOrders");
       setOrders(res.data);
     } catch (error) {
       console.error(error);

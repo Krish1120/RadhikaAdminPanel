@@ -20,6 +20,7 @@ import PreviewImage from "../Components/PreviewImage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import fetcher from "../Components/axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -106,12 +107,14 @@ const categories = [
   "Khopa Jhapta",
   "Sakha & Pola",
 ];
-function AddProducts() {
+function EditProducts() {
+  const data = useLocation().state;
+  const navigate = useNavigate();
   const { drawerOpen } = useSelector((state) => state.userReducer);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const notify = () =>
-    toast.success("Product Added Successfully!", {
+    toast.success("Product Updated Successfully!", {
       position: "top-center",
       autoClose: 2000,
     });
@@ -125,20 +128,22 @@ function AddProducts() {
   };
   const formik = useFormik({
     initialValues: {
-      productName: "",
-      category: "",
-      forMenOrWomen: "",
-      description: "",
-      quantity: "",
-      size: [],
-      material: [],
-      price: "",
-      status: "",
+      productId: data.product._id,
+      productName: data.product.productName,
+      category: data.product.category,
+      forMenOrWomen: data.product.forMenOrWomen,
+      description: data.product.description,
+      quantity: data.product.quantity,
+      size: data.product.size[0].split(","),
+      material: data.product.material[0].split(","),
+      price: data.product.price,
+      status: data.product.status,
       images: [],
     },
     validationSchema: validationSchema,
     onSubmit: (values, formikActions) => {
       const formData = new FormData();
+      formData.append("productId", values.productId);
       formData.append("productName", values.productName);
       formData.append("category", values.category);
       formData.append("price", values.price);
@@ -152,15 +157,15 @@ function AddProducts() {
         formData.append("productPicture", pic);
       }
       try {
-        const res = fetcher.post("/addNewProduct", formData, {
+        const res = fetcher.post("/editProduct", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        console.log(res);
-        notify();
+        alert("Product Updated Successfully!");
+        formikActions.resetForm();
+        navigate("/");
       } catch (error) {
         console.error(error);
       }
-      formikActions.resetForm();
     },
   });
   const onSelectFile = (e) => {
@@ -442,7 +447,7 @@ function AddProducts() {
                         alignSelf: "center",
                       }}
                     >
-                      ADD PRODUCT
+                      UPDATE PRODUCT
                     </Button>
                   </FormControl>
                 </div>
@@ -456,4 +461,4 @@ function AddProducts() {
   );
 }
 
-export default AddProducts;
+export default EditProducts;

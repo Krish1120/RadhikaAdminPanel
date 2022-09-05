@@ -4,6 +4,9 @@
 .active .confirmDelete {
   display: flex;
 }
+.active .editBtn {
+  display: none;
+}
 
 .inactive .deleteBtn {
   display: flex;
