@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import { Store } from "./redux/store";
 import AddCoupons from "./Views/AddCoupon";
 import EditProducts from "./Views/EditProduct";
+import Banners from "./Views/Banners";
+import PushNotification from "./Views/PushNotification";
 
 const theme = createTheme({
   typography: {
@@ -29,6 +31,11 @@ function App() {
               <Route
                 path="/editProduct"
                 element={<EditProducts></EditProducts>}
+              ></Route>
+              <Route path="/addBanner" element={<Banners></Banners>}></Route>
+              <Route
+                path="/sendNotification"
+                element={<PushNotification></PushNotification>}
               ></Route>
               <Route path="/users" element={<Users></Users>}></Route>
               <Route path="/orders" element={<Orders></Orders>}></Route>

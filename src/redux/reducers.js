@@ -3,6 +3,7 @@ import {
   SET_PRODUCTDATA,
   SET_USERS,
   SET_COUPONS,
+  SET_BANNERS,
 } from "./actions";
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
   productData: "",
   users: "",
   coupons: "",
+  banners: "",
 };
 
 function userReducer(state = initialState, action) {
@@ -22,6 +24,8 @@ function userReducer(state = initialState, action) {
       return { ...state, users: action.payload };
     case "SET_COUPONS":
       return { ...state, coupons: action.payload };
+    case "SET_BANNERS":
+      return { ...state, banners: action.payload };
     default:
       return state;
   }

@@ -18,6 +18,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import DiscountIcon from "@mui/icons-material/Discount";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { pink } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -186,6 +188,36 @@ export default function DrawerLeft() {
               <ListItemText
                 primary={
                   <Typography sx={{ fontWeight: "500" }}>Add Coupon</Typography>
+                }
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                navigate("/addBanner");
+              }}
+            >
+              <InsertPhotoIcon style={{ paddingRight: 5 }} />
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontWeight: "500" }}>Add Banner</Typography>
+                }
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                navigate("/sendNotification");
+              }}
+            >
+              <CircleNotificationsIcon style={{ paddingRight: 5 }} />
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontWeight: "500" }}>
+                    Send Notification
+                  </Typography>
                 }
               />
             </ListItemButton>

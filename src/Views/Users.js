@@ -73,7 +73,6 @@ function Users() {
     try {
       const res = await fetcher.get("/viewAllUsers");
       dispatch(setUsers(res.data));
-      console.log(users);
       if (users) {
         for (let i = 0; i < users.length; i++) {
           let id = users[i]._id;

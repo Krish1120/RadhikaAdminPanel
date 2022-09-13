@@ -116,7 +116,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchApi();
-  }, [value]);
+  }, []);
 
   function toggleActive(id) {
     setShow({ ...show, activeCard: show.products.filter((p) => p._id === id) });
@@ -446,6 +446,7 @@ export default function Home() {
                                         );
                                         console.log(res);
                                         notify();
+                                        fetchApi();
                                       } catch (error) {
                                         console.error(error);
                                       }
@@ -613,7 +614,7 @@ export default function Home() {
                                         `/deleteCoupon/${coupon._id}`
                                       );
                                       notifyCoupon();
-                                      console.log(res);
+                                      fetchApi();
                                     } catch (error) {
                                       console.error(error);
                                     }

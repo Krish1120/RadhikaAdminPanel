@@ -11,10 +11,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import fetcher from "../Components/axios";
+import { setUsers } from "../redux/actions";
+import { ToastContainer, toast } from "react-toastify";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -38,7 +40,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 
 function Orders() {
   const [orders, setOrders] = useState([]);
-  const [updatedStatus, setUpdatedStatus] = useState([]);
+  const dispatch = useDispatch();
+
+  const notify = () =>
+    toast.success("Order status updated Successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
   const fetchApi = async () => {
     try {
       const res = await fetcher.get("/showOrders");
@@ -47,10 +55,18 @@ function Orders() {
       console.error(error);
     }
   };
+  const fetchUsersApi = async () => {
+    try {
+      const res = await fetcher.get("/viewAllUsers");
+      dispatch(setUsers(res.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     fetchApi();
+    fetchUsersApi();
   }, []);
-  console.log(updatedStatus);
   const { drawerOpen, productData, users } = useSelector(
     (state) => state.userReducer
   );
@@ -68,39 +84,264 @@ function Orders() {
           }}
         >
           <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={3} marginTop={1}>
+            <Grid container spacing={3}>
               {orders &&
                 orders.map((order) => {
                   return (
                     <Grid item xs={12}>
-                      <Card sx={{ margin: 1, width: "20rem" }}>
-                        <Typography
-                          variant="h5"
-                          component="div"
-                          margin={1}
-                          textAlign="center"
+                      <Card sx={{ margin: 1, padding: 1 }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
                         >
-                          {order._id}
-                        </Typography>
-                        {/* <CardMedia
-                            component="img"
-                            style={{ height: "20rem" }}
-                            alt={product.productName}
-                            image={product.images[0].imgUrl}
-                          /> */}
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            margin={1}
+                            textAlign="center"
+                          >
+                            Order ID :
+                          </Typography>
+                          <Typography
+                            component="div"
+                            fontSize={16}
+                            textAlign="center"
+                          >
+                            {order.razorpay_order_id}
+                          </Typography>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            margin={1}
+                            textAlign="center"
+                            minwidth={150}
+                          >
+                            Razorpay Payment ID
+                          </Typography>
+                          <Typography variant="h6">:</Typography>
+                          <Typography
+                            component="div"
+                            fontSize={16}
+                            textAlign="center"
+                            marginLeft={1}
+                          >
+                            {order.razorpay_payment_id}
+                          </Typography>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            margin={1}
+                            textAlign="center"
+                          >
+                            Shiprocket Order ID :
+                          </Typography>
+                          <Typography
+                            component="div"
+                            fontSize={16}
+                            textAlign="center"
+                          >
+                            {order.shipRocketOrderId}
+                          </Typography>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            margin={1}
+                            textAlign="center"
+                          >
+                            Shiprocket Shipment ID :
+                          </Typography>
+                          <Typography
+                            component="div"
+                            fontSize={16}
+                            textAlign="center"
+                          >
+                            {order.shipRocketShipmentId}
+                          </Typography>
+                        </div>
                         <CardContent>
+                          <Grid container spacing={3}>
+                            {order.products.map((prod) => {
+                              return (
+                                <Grid item xs={3}>
+                                  <Card
+                                    style={{
+                                      margin: 5,
+                                      padding: 5,
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <img
+                                      src={prod.product.images[0].imgUrl}
+                                      alt="image"
+                                      height="150rem"
+                                      width="120rem"
+                                    />
+                                    <div style={{ margin: 1 }}>
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Typography variant="body1">
+                                          Name
+                                        </Typography>
+                                        <Typography variant="body1" marginX={1}>
+                                          :
+                                        </Typography>
+                                        <Typography variant="body2">
+                                          {prod.product.productName}
+                                        </Typography>
+                                      </div>
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Typography variant="body1">
+                                          Size
+                                        </Typography>
+                                        <Typography variant="body1" marginX={1}>
+                                          :
+                                        </Typography>
+                                        <Typography variant="body2">
+                                          {prod.size}
+                                        </Typography>
+                                      </div>
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Typography variant="body1">
+                                          Quantity
+                                        </Typography>
+                                        <Typography variant="body1" marginX={1}>
+                                          :
+                                        </Typography>
+                                        <Typography variant="body2">
+                                          {prod.quantity}
+                                        </Typography>
+                                      </div>
+                                    </div>
+                                  </Card>
+                                </Grid>
+                              );
+                            })}
+                          </Grid>
+                          <div>
+                            {users &&
+                              users
+                                .filter((user) => {
+                                  if (user._id === order.userID) {
+                                    return user;
+                                  }
+                                })
+                                .map((item) => {
+                                  return (
+                                    <div>
+                                      <div style={{ display: "flex" }}>
+                                        <Typography
+                                          variant="body1"
+                                          component="div"
+                                        >
+                                          Customer :
+                                        </Typography>
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                          alignSelf="center"
+                                          marginLeft={1}
+                                        >
+                                          {item.name}
+                                        </Typography>
+                                      </div>
+                                      <div style={{ display: "flex" }}>
+                                        <Typography
+                                          variant="body1"
+                                          component="div"
+                                        >
+                                          Phone :
+                                        </Typography>
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                          alignSelf="center"
+                                          marginLeft={1}
+                                        >
+                                          +91{item.phone}
+                                        </Typography>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                          </div>
                           <div style={{ display: "flex" }}>
                             <Typography variant="body1" component="div">
-                              Status :
+                              Status
                             </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              alignSelf="center"
-                              marginLeft={1}
+                            <Typography mx={1}>:</Typography>
+                            <Select
+                              labelId="demo-simple-select-autowidth-label"
+                              id="demo-simple-select-autowidth"
+                              name="status"
+                              label="STATUS"
+                              autoWidth
+                              value={order.status}
+                              onChange={async (e) => {
+                                try {
+                                  const res = await fetcher.patch(
+                                    `/updateOrder/${order._id}`,
+                                    {
+                                      status: e.target.value,
+                                    }
+                                  );
+                                  fetchApi();
+                                  notify();
+                                } catch (error) {
+                                  console.error(error);
+                                }
+                              }}
+                              style={{ height: "30px", fontSize: 15 }}
                             >
-                              {order.status}
-                            </Typography>
+                              <MenuItem value="PLACED">PLACED</MenuItem>
+                              <MenuItem value="PENDING">PENDING</MenuItem>
+                              <MenuItem value="PACKED">PACKED</MenuItem>
+                              <MenuItem value="SHIPPED">SHIPPED</MenuItem>
+                              <MenuItem value="DELIVERED">DELIVERED</MenuItem>
+                              <MenuItem value="CANCELLED">CANCELLED</MenuItem>
+                            </Select>
                           </div>
                           <div style={{ display: "flex" }}>
                             <Typography variant="body1" component="div">
@@ -112,53 +353,31 @@ function Orders() {
                               alignSelf="center"
                               marginLeft={1}
                             >
-                              {order.amount}
+                              Rs.{order.amount}
                             </Typography>
                           </div>
-                          {/* <Grid item xs>
-                            <FormControl sx={{ m: 1, minWidth: 200 }}>
-                              <InputLabel id="demo-simple-select-autowidth-label">
-                                STATUS
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                id="demo-simple-select-autowidth"
-                                name="status"
-                                label="STATUS"
-                                value={updatedStatus}
-                                onChange={(e) => {
-                                  setUpdatedStatus(e.target.value);
-                                }}
-                                fullWidth
-                              >
-                                <MenuItem value="PLACED">PLACED</MenuItem>
-                                <MenuItem value="PENDING">PENDING</MenuItem>
-                                <MenuItem value="PACKED">PACKED</MenuItem>
-                                <MenuItem value="SHIPPED">SHIPPED</MenuItem>
-                                <MenuItem value="DELIVERED">DELIVERED</MenuItem>
-                                <MenuItem value="CANCELLED">CANCELLED</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </Grid> */}
-                        </CardContent>
-                        <CardActions>
-                          <Button
-                            color="primary"
-                            variant="contained"
-                            // onClick={async () => {
-                            //   try {
-                            //     const res = await axios.delete(
-                            //       `http://localhost:50020/deleteProduct/${product._id}`
-                            //     );
-                            //     console.log(res);
-                            //   } catch (error) {
-                            //     console.error(error);
-                            //   }
-                            // }}
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
                           >
-                            UPDATE
-                          </Button>
-                        </CardActions>
+                            <Typography
+                              variant="body1"
+                              component="div"
+                              width={100}
+                            >
+                              Shipping Address
+                            </Typography>
+                            <Typography variant="body1">:</Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              alignSelf="center"
+                              maxWidth={230}
+                              marginLeft={2}
+                            >
+                              {order.address}
+                            </Typography>
+                          </div>
+                        </CardContent>
                       </Card>
                     </Grid>
                   );
@@ -166,6 +385,7 @@ function Orders() {
             </Grid>
           </Box>
         </div>
+        <ToastContainer />
       </Main>
     </div>
   );

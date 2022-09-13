@@ -2,6 +2,7 @@ export const SET_DRAWEROPEN = "SET_DRAWEROPEN";
 export const SET_PRODUCTDATA = "SET_PRODUCTDATA";
 export const SET_USERS = "SET_USERS";
 export const SET_COUPONS = "SET_COUPONS";
+export const SET_BANNERS = "SET_BANNERS";
 
 export const setDrawerOpen = (drawerOpen) => (dispatch) => {
   dispatch({
@@ -25,5 +26,11 @@ export const setCoupons = (coupons) => (dispatch) => {
   dispatch({
     type: SET_COUPONS,
     payload: coupons,
+  });
+};
+export const setBanners = (banners) => (dispatch) => {
+  dispatch({
+    type: SET_BANNERS,
+    payload: banners,
   });
 };
