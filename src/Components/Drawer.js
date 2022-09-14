@@ -23,7 +23,8 @@ import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { pink } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setDrawerOpen } from "../redux/actions";
+import { setDrawerOpen, setIsLoggedIn } from "../redux/actions";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -151,7 +152,7 @@ export default function DrawerLeft() {
           <ListItem disablePadding>
             <ListItemButton
               onClick={() => {
-                navigate("/");
+                navigate("/home");
               }}
             >
               <DashboardIcon style={{ paddingRight: 5 }} />
@@ -246,6 +247,21 @@ export default function DrawerLeft() {
               <ListItemText
                 primary={
                   <Typography sx={{ fontWeight: "500" }}>Orders</Typography>
+                }
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                dispatch(setIsLoggedIn(false));
+                navigate("/");
+              }}
+            >
+              <LogoutIcon style={{ paddingRight: 5 }} />
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontWeight: "500" }}>LOGOUT</Typography>
                 }
               />
             </ListItemButton>

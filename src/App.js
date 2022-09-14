@@ -10,6 +10,8 @@ import AddCoupons from "./Views/AddCoupon";
 import EditProducts from "./Views/EditProduct";
 import Banners from "./Views/Banners";
 import PushNotification from "./Views/PushNotification";
+import Login from "./Views/Login";
+import PrivateRoute from "./Components/PrivateRoute";
 
 const theme = createTheme({
   typography: {
@@ -23,25 +25,70 @@ function App() {
         <div className="App">
           <Router>
             <Routes>
-              <Route path="/" element={<Home></Home>}></Route>
+              <Route path="/" element={<Login></Login>}></Route>
+              <Route
+                path="/home"
+                element={
+                  <PrivateRoute>
+                    <Home />
+                  </PrivateRoute>
+                }
+              ></Route>
               <Route
                 path="/addProduct"
-                element={<AddProducts></AddProducts>}
+                element={
+                  <PrivateRoute>
+                    <AddProducts />
+                  </PrivateRoute>
+                }
               ></Route>
               <Route
                 path="/editProduct"
-                element={<EditProducts></EditProducts>}
+                element={
+                  <PrivateRoute>
+                    <EditProducts />
+                  </PrivateRoute>
+                }
               ></Route>
-              <Route path="/addBanner" element={<Banners></Banners>}></Route>
+              <Route
+                path="/addBanner"
+                element={
+                  <PrivateRoute>
+                    <Banners />
+                  </PrivateRoute>
+                }
+              ></Route>
               <Route
                 path="/sendNotification"
-                element={<PushNotification></PushNotification>}
+                element={
+                  <PrivateRoute>
+                    <PushNotification />
+                  </PrivateRoute>
+                }
               ></Route>
-              <Route path="/users" element={<Users></Users>}></Route>
-              <Route path="/orders" element={<Orders></Orders>}></Route>
+              <Route
+                path="/users"
+                element={
+                  <PrivateRoute>
+                    <Users />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                path="/orders"
+                element={
+                  <PrivateRoute>
+                    <Orders />
+                  </PrivateRoute>
+                }
+              ></Route>
               <Route
                 path="/addCoupon"
-                element={<AddCoupons></AddCoupons>}
+                element={
+                  <PrivateRoute>
+                    <AddCoupons />
+                  </PrivateRoute>
+                }
               ></Route>
             </Routes>
           </Router>

@@ -4,6 +4,7 @@ import {
   SET_USERS,
   SET_COUPONS,
   SET_BANNERS,
+  SET_ISLOGGEDIN,
 } from "./actions";
 
 const initialState = {
@@ -12,10 +13,15 @@ const initialState = {
   users: "",
   coupons: "",
   banners: "",
+  username: "admin",
+  password: "Radhika@#%@79*",
+  isLoggedIn: false,
 };
 
 function userReducer(state = initialState, action) {
   switch (action.type) {
+    case "SET_ISLOGGEDIN":
+      return { ...state, isLoggedIn: action.payload };
     case "SET_DRAWEROPEN":
       return { ...state, drawerOpen: action.payload };
     case "SET_PRODUCTDATA":

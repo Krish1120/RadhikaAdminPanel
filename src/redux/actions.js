@@ -3,7 +3,14 @@ export const SET_PRODUCTDATA = "SET_PRODUCTDATA";
 export const SET_USERS = "SET_USERS";
 export const SET_COUPONS = "SET_COUPONS";
 export const SET_BANNERS = "SET_BANNERS";
+export const SET_ISLOGGEDIN = "SET_ISLOGGEDIN";
 
+export const setIsLoggedIn = (isLoggedIn) => (dispatch) => {
+  dispatch({
+    type: SET_ISLOGGEDIN,
+    payload: isLoggedIn,
+  });
+};
 export const setDrawerOpen = (drawerOpen) => (dispatch) => {
   dispatch({
     type: SET_DRAWEROPEN,

@@ -27,6 +27,8 @@ import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import fetcher from "../Components/axios";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -175,6 +177,12 @@ export default function Home() {
       position: "top-center",
       autoClose: 2000,
     });
+  const notifyUpdate = () =>
+    toast.success("Product Status Updated Successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
+
   return (
     <div>
       <DrawerLeft />
@@ -398,14 +406,40 @@ export default function Home() {
                                 <Typography variant="body1" component="div">
                                   Status :
                                 </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
+                                <Select
+                                  labelId="demo-simple-select-autowidth-label"
+                                  id="demo-simple-select-autowidth"
+                                  name="status"
+                                  label="STATUS"
+                                  autoWidth
+                                  value={product.status}
+                                  onChange={async (e) => {
+                                    try {
+                                      const res = await fetcher.patch(
+                                        `/updateProduct/${product._id}`,
+                                        {
+                                          status: e.target.value,
+                                        }
+                                      );
+                                      fetchApi();
+                                      notifyUpdate();
+                                    } catch (error) {
+                                      console.error(error);
+                                    }
+                                  }}
+                                  style={{
+                                    height: "30px",
+                                    fontSize: 15,
+                                    marginLeft: 5,
+                                  }}
                                 >
-                                  {product.status}
-                                </Typography>
+                                  <MenuItem value="available">
+                                    available
+                                  </MenuItem>
+                                  <MenuItem value="unavailable">
+                                    unavailable
+                                  </MenuItem>
+                                </Select>
                               </div>
                             </CardContent>
                             <CardActions
