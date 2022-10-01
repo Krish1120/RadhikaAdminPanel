@@ -20,6 +20,7 @@ import PreviewImage from "../Components/PreviewImage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import fetcher from "../Components/axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -107,6 +108,7 @@ const categories = [
   "Sakha & Pola",
 ];
 function AddProducts() {
+  const navigate = useNavigate();
   const { drawerOpen } = useSelector((state) => state.userReducer);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -157,6 +159,7 @@ function AddProducts() {
         });
         console.log(res);
         notify();
+        navigate("/home");
       } catch (error) {
         console.error(error);
       }
@@ -450,7 +453,6 @@ function AddProducts() {
             </Grid>
           </Box>
         </form>
-        <ToastContainer />
       </Main>
     </div>
   );

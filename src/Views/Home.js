@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import DrawerLeft from "../Components/Drawer";
 import Card from "@mui/material/Card";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import ListItemText from "@mui/material/ListItemText";
+import Checkbox from "@mui/material/Checkbox";
+import InputLabel from "@mui/material/InputLabel";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
@@ -29,6 +37,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import fetcher from "../Components/axios";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Modal from "react-bootstrap/Modal";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -52,6 +61,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
     }),
   })
 );
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -71,7 +81,6 @@ function TabPanel(props) {
     </div>
   );
 }
-
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
@@ -86,10 +95,34 @@ function a11yProps(index) {
 }
 
 export default function Home() {
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  const sizes = [
+    "2.2",
+    "2.4",
+    "2.6",
+    "2.8",
+    "2.10",
+    "24",
+    "30",
+    "36",
+    "42",
+    "FREE",
+  ];
+
   const navigate = useNavigate();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [searchProduct, setSearchProduct] = React.useState("");
+  const [modalShow, setModalShow] = React.useState(false);
   const [show, setShow] = React.useState({
     activeCard: null,
     products: null,
@@ -389,18 +422,44 @@ export default function Home() {
                                   {product.material}
                                 </Typography>
                               </div>
-                              <div style={{ display: "flex" }}>
-                                <Typography variant="body1" component="div">
-                                  Available sizes :
-                                </Typography>
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                  alignSelf="center"
-                                  marginLeft={1}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    display: "flex",
+                                  }}
                                 >
-                                  {product.size}
-                                </Typography>
+                                  <Typography variant="body1" component="div">
+                                    Available sizes :
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    alignSelf="center"
+                                    marginLeft={1}
+                                  >
+                                    {product.size}
+                                  </Typography>
+                                </div>
+                                <Button
+                                  variant="contained"
+                                  className="editBtn"
+                                  style={{
+                                    padding: 1,
+                                    margin: 10,
+                                  }}
+                                  onClick={() => {
+                                    navigate("/editSize", {
+                                      state: { product: product },
+                                    });
+                                  }}
+                                >
+                                  Edit Sizes
+                                </Button>
                               </div>
                               <div style={{ display: "flex" }}>
                                 <Typography variant="body1" component="div">
@@ -675,7 +734,6 @@ export default function Home() {
             </TabPanel>
           </Box>
         </div>
-        <ToastContainer />
       </Main>
     </div>
   );

@@ -12,6 +12,8 @@ import Banners from "./Views/Banners";
 import PushNotification from "./Views/PushNotification";
 import Login from "./Views/Login";
 import PrivateRoute from "./Components/PrivateRoute";
+import EditSize from "./Components/EditSize";
+import { ToastContainer, toast } from "react-toastify";
 
 const theme = createTheme({
   typography: {
@@ -47,6 +49,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <EditProducts />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                path="/editSize"
+                element={
+                  <PrivateRoute>
+                    <EditSize />
                   </PrivateRoute>
                 }
               ></Route>
@@ -93,6 +103,7 @@ function App() {
             </Routes>
           </Router>
         </div>
+        <ToastContainer />
       </ThemeProvider>
     </Provider>
   );

@@ -249,7 +249,6 @@ function Banners() {
           ADD BANNER
         </Button>
         <Banner />
-        <ToastContainer />
       </Main>
       <Modal
         keepMounted

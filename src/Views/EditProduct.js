@@ -160,9 +160,9 @@ function EditProducts() {
         const res = fetcher.post("/editProduct", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Product Updated Successfully!");
+        notify();
         formikActions.resetForm();
-        navigate("/");
+        navigate("/home");
       } catch (error) {
         console.error(error);
       }
@@ -455,7 +455,6 @@ function EditProducts() {
             </Grid>
           </Box>
         </form>
-        <ToastContainer />
       </Main>
     </div>
   );

@@ -385,7 +385,6 @@ function Orders() {
             </Grid>
           </Box>
         </div>
-        <ToastContainer />
       </Main>
     </div>
   );

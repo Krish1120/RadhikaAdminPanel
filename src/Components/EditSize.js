@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -20,6 +20,7 @@ import PreviewImage from "../Components/PreviewImage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import fetcher from "../Components/axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -41,20 +42,26 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   })
 );
 
-const validationSchema = yup.object({
-  title: yup
-    .string("Enter notification title")
-    .required("Notification title  is required"),
-  body: yup
-    .string("Enter notification body")
-    .required("Notification body is required"),
-});
-function PushNotification() {
+const sizes = [
+  "2.2",
+  "2.4",
+  "2.6",
+  "2.8",
+  "2.10",
+  "24",
+  "30",
+  "36",
+  "42",
+  "FREE",
+];
+function EditSize() {
+  const data = useLocation().state;
+  const navigate = useNavigate();
   const { drawerOpen } = useSelector((state) => state.userReducer);
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const notify = () =>
-    toast.success("Notification sent successfully!", {
+    toast.success("Product Size Updated Successfully!", {
       position: "top-center",
       autoClose: 2000,
     });
@@ -68,20 +75,21 @@ function PushNotification() {
   };
   const formik = useFormik({
     initialValues: {
-      title: "",
-      body: "",
+      productId: data.product._id,
+      productName: data.product.productName,
+      size: data.product.size[0].split(","),
     },
-    validationSchema: validationSchema,
     onSubmit: (values, formikActions) => {
       try {
-        const res = fetcher.post("/sendNotification", values);
-        console.log(res);
-        // console.log(values);
+        const res = fetcher.patch(`/updateProductSize/${values.productId}`, {
+          size: values.size.toString(),
+        });
+        formikActions.resetForm();
+        navigate("/home");
         notify();
       } catch (error) {
         console.error(error);
       }
-      formikActions.resetForm();
     },
   });
   return (
@@ -95,34 +103,44 @@ function PushNotification() {
             }}
           >
             <Grid container spacing={12}>
-              <Grid item xs>
-                <FormControl sx={{ m: 1, minWidth: 300 }}>
-                  <TextField
-                    fullWidth
-                    id="title"
-                    name="title"
-                    label="TITLE"
-                    value={formik.values.title}
-                    onChange={formik.handleChange}
-                    error={formik.touched.title && Boolean(formik.errors.title)}
-                    helperText={formik.touched.title && formik.errors.title}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs>
-                <FormControl sx={{ m: 1, minWidth: 300 }}>
-                  <TextField
-                    id="body"
-                    label="BODY"
-                    name="body"
-                    multiline
-                    maxRows={5}
-                    value={formik.values.body}
-                    onChange={formik.handleChange}
-                    error={formik.touched.body && Boolean(formik.errors.body)}
-                    helperText={formik.touched.body && formik.errors.body}
-                  />
-                </FormControl>
+              <Grid item xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Typography variant="h4" m={2}>
+                    Edit Size of {formik.values.productName}
+                  </Typography>
+                  <FormControl sx={{ m: 1, width: 300 }}>
+                    <InputLabel id="demo-multiple-checkbox-label">
+                      SIZE
+                    </InputLabel>
+                    <Select
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      name="size"
+                      label="SIZE"
+                      multiple
+                      value={formik.values.size}
+                      onChange={formik.handleChange}
+                      renderValue={(selected) => selected.join(", ")}
+                      MenuProps={MenuProps}
+                    >
+                      {sizes.map((size) => (
+                        <MenuItem key={size} value={size}>
+                          <Checkbox
+                            checked={formik.values.size.indexOf(size) > -1}
+                          />
+                          <ListItemText primary={size} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
               </Grid>
               <Grid item xs={12}>
                 <div
@@ -143,7 +161,7 @@ function PushNotification() {
                         alignSelf: "center",
                       }}
                     >
-                      SEND NOTIFICATION
+                      UPDATE PRODUCT SIZE
                     </Button>
                   </FormControl>
                 </div>
@@ -156,4 +174,4 @@ function PushNotification() {
   );
 }
 
-export default PushNotification;
+export default EditSize;
