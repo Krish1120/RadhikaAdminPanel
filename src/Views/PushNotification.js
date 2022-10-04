@@ -70,12 +70,20 @@ function PushNotification() {
     initialValues: {
       title: "",
       body: "",
+      images: [],
     },
     validationSchema: validationSchema,
     onSubmit: (values, formikActions) => {
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("body", values.title);
+      for (let pic of values.images) {
+        formData.append("productPicture", pic);
+      }
       try {
-        const res = fetcher.post("/sendNotification", values);
-        console.log(res);
+        const res = fetcher.post("/sendNotification", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         // console.log(values);
         notify();
       } catch (error) {
@@ -84,6 +92,17 @@ function PushNotification() {
       formikActions.resetForm();
     },
   });
+  const onSelectFile = (e) => {
+    formik.setFieldValue("images", [
+      ...formik.values.images,
+      ...e.target.files,
+    ]);
+  };
+  const deleteHandler = (key) => {
+    let arr = [...formik.values.images];
+    arr.splice(key, 1);
+    formik.setFieldValue("images", arr);
+  };
   return (
     <div>
       <DrawerLeft />
@@ -123,6 +142,41 @@ function PushNotification() {
                     helperText={formik.touched.body && formik.errors.body}
                   />
                 </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControl sx={{ m: 1 }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      style={{
+                        fontSize: 20,
+                        borderRadius: 12,
+                      }}
+                    >
+                      Upload
+                      <input
+                        disabled={
+                          formik.values.images.length === 1 ? true : false
+                        }
+                        hidden
+                        accept="image/*"
+                        type="file"
+                        onChange={onSelectFile}
+                      />
+                    </Button>
+                  </FormControl>
+                </div>
+                <PreviewImage
+                  filesData={formik.values.images}
+                  deleteHandler={deleteHandler}
+                />
               </Grid>
               <Grid item xs={12}>
                 <div
