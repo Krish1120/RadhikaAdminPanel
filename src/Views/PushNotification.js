@@ -76,7 +76,7 @@ function PushNotification() {
     onSubmit: (values, formikActions) => {
       const formData = new FormData();
       formData.append("title", values.title);
-      formData.append("body", values.title);
+      formData.append("body", values.body);
       for (let pic of values.images) {
         formData.append("productPicture", pic);
       }

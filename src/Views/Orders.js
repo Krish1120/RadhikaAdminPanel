@@ -245,6 +245,22 @@ function Orders() {
                                         }}
                                       >
                                         <Typography variant="body1">
+                                          Price
+                                        </Typography>
+                                        <Typography variant="body1" marginX={1}>
+                                          :
+                                        </Typography>
+                                        <Typography variant="body2">
+                                          ₹{prod.product.price}
+                                        </Typography>
+                                      </div>
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Typography variant="body1">
                                           Quantity
                                         </Typography>
                                         <Typography variant="body1" marginX={1}>
@@ -345,7 +361,7 @@ function Orders() {
                           </div>
                           <div style={{ display: "flex" }}>
                             <Typography variant="body1" component="div">
-                              Amount :
+                              Total Amount :
                             </Typography>
                             <Typography
                               variant="body2"

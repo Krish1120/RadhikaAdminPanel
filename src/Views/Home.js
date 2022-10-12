@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DrawerLeft from "../Components/Drawer";
 import Card from "@mui/material/Card";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
@@ -38,6 +40,33 @@ import fetcher from "../Components/axios";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Modal from "react-bootstrap/Modal";
+
+const categories = [
+  "Bangle",
+  "Tika & Tyra",
+  "Nath",
+  "Mukut/Crown",
+  "Earing & Tops",
+  "Bahubali Earing",
+  "Chowker",
+  "Bajubandh",
+  "Necklace",
+  "Long Set",
+  "Kamarbandh",
+  "Chur",
+  "Hath Panja",
+  "Finger Ring",
+  "Payal/Anklet",
+  "Bridal Necklace",
+  "Chain",
+  "Mangalsutra",
+  "Bracelet",
+  "Pendent Set",
+  "Tie Set",
+  "Mantasha",
+  "Khopa Jhapta",
+  "Sakha & Pola",
+];
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -123,6 +152,7 @@ export default function Home() {
   const [value, setValue] = React.useState(0);
   const [searchProduct, setSearchProduct] = React.useState("");
   const [modalShow, setModalShow] = React.useState(false);
+  const [filterShow, setFilterShow] = useState(false);
   const [show, setShow] = React.useState({
     activeCard: null,
     products: null,
@@ -216,6 +246,19 @@ export default function Home() {
       autoClose: 2000,
     });
 
+  const handleFilterChange = (event) => {
+    setSearchProduct(event.target.value);
+  };
+
+  const handleFilterShow = () => {
+    if (filterShow) {
+      setFilterShow(false);
+      setSearchProduct("");
+    } else {
+      setFilterShow(true);
+    }
+  };
+
   return (
     <div>
       <DrawerLeft />
@@ -279,26 +322,77 @@ export default function Home() {
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} dir={theme.direction}>
-              <TextField
-                id="outlined-search"
-                label="Search Product"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingTop: "2rem",
                 }}
-                sx={{
-                  marginTop: 3,
-                  marginBottom: 3,
-                  width: "100%",
-                }}
-                onChange={(e) => {
-                  setSearchProduct(e.target.value);
-                }}
-              />
+              >
+                <div style={{ width: "70%" }}>
+                  <TextField
+                    id="outlined-search"
+                    label="Search Product"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <SearchIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ width: "100%" }}
+                    onChange={(e) => {
+                      setSearchProduct(e.target.value);
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "30%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: searchProduct === "" ? "#3f51b5" : "red",
+                    }}
+                    onClick={handleFilterShow}
+                  >
+                    {searchProduct === "" ? "Filter" : "Remove filter"}
+                  </Button>
+                </div>
+              </div>
               <Grid container spacing={3} marginTop={1}>
+                <Grid item xs={12}>
+                  {filterShow ? (
+                    <>
+                      <FormControl>
+                        <FormLabel id="demo-controlled-radio-buttons-group">
+                          Select Category
+                        </FormLabel>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-controlled-radio-buttons-group"
+                          name="controlled-radio-buttons-group"
+                          value={searchProduct}
+                          onChange={handleFilterChange}
+                        >
+                          {categories.map((category) => {
+                            return (
+                              <FormControlLabel
+                                value={category}
+                                control={<Radio />}
+                                label={category}
+                              />
+                            );
+                          })}
+                        </RadioGroup>
+                      </FormControl>
+                    </>
+                  ) : null}
+                </Grid>
                 {productData &&
                   productData
                     .filter((item) => {

@@ -159,7 +159,6 @@ function AddProducts() {
         });
         console.log(res);
         notify();
-        navigate("/home");
       } catch (error) {
         console.error(error);
       }
