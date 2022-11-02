@@ -70,21 +70,11 @@ function PushNotification() {
     initialValues: {
       title: "",
       body: "",
-      images: [],
     },
     validationSchema: validationSchema,
     onSubmit: (values, formikActions) => {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("body", values.body);
-      for (let pic of values.images) {
-        formData.append("productPicture", pic);
-      }
       try {
-        const res = fetcher.post("/sendNotification", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        // console.log(values);
+        const res = fetcher.post("/sendNotification", values);
         notify();
       } catch (error) {
         console.error(error);
@@ -92,17 +82,7 @@ function PushNotification() {
       formikActions.resetForm();
     },
   });
-  const onSelectFile = (e) => {
-    formik.setFieldValue("images", [
-      ...formik.values.images,
-      ...e.target.files,
-    ]);
-  };
-  const deleteHandler = (key) => {
-    let arr = [...formik.values.images];
-    arr.splice(key, 1);
-    formik.setFieldValue("images", arr);
-  };
+
   return (
     <div>
       <DrawerLeft />
@@ -153,6 +133,61 @@ function PushNotification() {
                 >
                   <FormControl sx={{ m: 1 }}>
                     <Button
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                      style={{
+                        fontSize: 20,
+                        borderRadius: 12,
+                        alignSelf: "center",
+                      }}
+                    >
+                      SEND NOTIFICATION
+                    </Button>
+                  </FormControl>
+                </div>
+              </Grid>
+            </Grid>
+          </Box>
+        </form>
+      </Main>
+    </div>
+  );
+}
+
+export default PushNotification;
+
+// images: [],
+// const formData = new FormData();
+// formData.append("title", values.title);
+// formData.append("body", values.body);
+// console.log(values.title, values.body);
+// for (let pic of values.images) {
+//   formData.append("productPicture", pic);
+// }
+
+// const onSelectFile = (e) => {
+//   formik.setFieldValue("images", [
+//     ...formik.values.images,
+//     ...e.target.files,
+//   ]);
+// };
+// const deleteHandler = (key) => {
+//   let arr = [...formik.values.images];
+//   arr.splice(key, 1);
+//   formik.setFieldValue("images", arr);
+// };
+{
+  /* <Grid item xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <FormControl sx={{ m: 1 }}>
+                    <Button
                       variant="contained"
                       component="label"
                       style={{
@@ -177,37 +212,5 @@ function PushNotification() {
                   filesData={formik.values.images}
                   deleteHandler={deleteHandler}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <FormControl sx={{ m: 1 }}>
-                    <Button
-                      color="success"
-                      variant="contained"
-                      type="submit"
-                      style={{
-                        fontSize: 20,
-                        borderRadius: 12,
-                        alignSelf: "center",
-                      }}
-                    >
-                      SEND NOTIFICATION
-                    </Button>
-                  </FormControl>
-                </div>
-              </Grid>
-            </Grid>
-          </Box>
-        </form>
-      </Main>
-    </div>
-  );
+              </Grid> */
 }
-
-export default PushNotification;
